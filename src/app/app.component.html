@@ -1,0 +1,288 @@
+<div class="card">
+  <div class="card-body">
+    <!-- <div class="input-group mb-3">
+      <input type="text" class="form-control form-control-lg" placeholder="Search..." aria-label="Search" aria-describedby="search">
+      <button class="btn btn-primary" type="button" id="search">Search</button>
+    </div> -->
+    <div class="row mb-5">
+      <div class="col-md-12 pb-4">
+        <div class="pagetitle-block">
+          <div class="title fs-24">Advanced Search</div>
+        </div>
+      </div>
+      <!-- Query -->
+      <div class="col-md-6">
+        <div class="title-block">
+          <div class="title"><span>1</span>Query</div>
+        </div>
+        <div class="row ft-query-row">
+          <div class="form-group col-md-6">
+            <label for="ft-trade" class="fs-16 form-label">Trade</label>
+
+            <ng-select [items]="trade" [multiple]="true" [(ngModel)]="filter.tradetype" bindLabel="name" bindValue="id">
+            </ng-select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="ft-frequency" class="fs-16 form-label">Frequency</label>
+            <select #ftFrequency class="form-control form-select" id="ft-frequency" (change)="onChangeFrequency(ftFrequency.value)">
+              <option value="0">Select</option>
+              <option value="M">Monthly</option>
+              <option value="Q">Quarterly</option>
+              <option value="Y" selected>Yearly</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Period -->
+      <div class="col-md-3">
+        <div class="title-block">
+          <div class="title"><span>2</span>Period</div>
+        </div>
+        <div class="row ft-year-row">
+          <ng-container *ngIf="{ frequency: ftFrequencyValue$ | async } as vm">
+            <!-- for year -->
+            <div class="form-group col-md-12" *ngIf="vm.frequency === 'Y'">
+              <label for="year" class="fs-16 form-label">Year</label>
+              <ng-select [items]="years" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value">
+              </ng-select>
+            </div>
+            <!-- for monthly -->
+            <ng-container *ngIf="vm.frequency === 'M'">
+              <div class="form-group col-md-6">
+                <label for="year" class="fs-16 form-label">Year</label>
+                <ng-select [items]="years" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value">
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <ng-container *ngIf="items.length === 1">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                        <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+                        <span class="ng-value-label">{{item['value']}}</span>
+                      </div>
+                    </ng-container>
+                    <div class="ng-value" *ngIf="items.length > 1">
+                      <span class="ng-value-label">{{items.length}} more...</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="month" class="fs-16 form-label">Month</label>
+                <ng-select [items]="months" [multiple]="true" [(ngModel)]="filter.month" bindLabel="name" bindValue="value">
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <ng-container *ngIf="items.length === 1">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                        <span class="ng-value-label">{{item['name']}}</span>
+                      </div>
+                    </ng-container>
+                    <div class="ng-value" *ngIf="items.length > 1">
+                      <span class="ng-value-label">{{items.length}} more...</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <!-- Country -->
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="title-block">
+              <div class="title"><span>3</span>Country</div>
+            </div>
+            <div class="row ft-year-row">
+              <div class="col-md-12">
+                <label class="fs-16 form-label">Select Country</label>
+                <ng-select [items]="cntry" [multiple]="true" [(ngModel)]="filter.country" bindLabel="name" bindValue="name">
+                </ng-select>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Code & Level -->
+      <div class="col-md-12">
+        <div class="title-block">
+          <div class="title"><span>4</span>Code &amp; Level</div>
+        </div>
+        <div class="row ft-query-row">
+          <div class="form-group col-md-6">
+            <label class="fs-16 form-label">Code</label>
+            <select class="form-control form-select" id="ft-itemCode">
+              <option value="0">Select</option>
+              <option value="HSCODE" selected>HSCODE</option>
+              <option value="SITC">SITC</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="fs-16 form-label">Level</label>
+            <select class="form-control form-select" id="ft-itemlevel">
+              <option value="0">Select</option>
+              <option value="HSCODE">2</option>
+              <option value="HSCODE">4</option>
+              <option value="HSCODE">8</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Items -->
+      <div class="col-md-12">
+        <div class="title-block">
+          <div class="title"><span>5</span>Items</div>
+        </div>
+        <div class="row ft-query-row">
+          <div class="form-group col-md-6" id="div-ft-itemclassification">
+            <label for="ft-trade" class="fs-16 form-label">Classification</label>
+            <select class="form-control form-select" id="ft-itemclassification">
+              <option value="-1">Select</option>
+              <option value="0">0 Food and Live Animals</option>
+              <option value="1">1 Beverages and Tobacco</option>
+              <option value="2">2 Crude Materials, Incredible, Except Fuels</option>
+              <option value="3">3 Mineral Fuels, Lubricants and Related Materials</option>
+              <option value="4">4 Animal and Vegetable Oils, Fats and Waxes</option>
+              <option value="5">5 Chemicals and Related Products N.E.S.</option>
+              <option value="6">6 Manufactured Goods Classified Chiefly by Material</option>
+              <option value="7">7 Machinery and Transport Equipment</option>
+              <option value="8">8 Miscellaneous Manufactured Articles</option>
+              <option value="9">9 Commodities and Transactions Etc</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="ft-trade" class="fs-16 form-label">All Items</label>
+            <select class="form-control form-select">
+              <option value="-1">Select</option>
+              <option value="0">0 Food and Live Animals</option>
+              <option value="1">1 Beverages and Tobacco</option>
+              <option value="2">2 Crude Materials, Incredible, Except Fuels</option>
+              <option value="3">3 Mineral Fuels, Lubricants and Related Materials</option>
+              <option value="4">4 Animal and Vegetable Oils, Fats and Waxes</option>
+              <option value="5">5 Chemicals and Related Products N.E.S.</option>
+              <option value="6">6 Manufactured Goods Classified Chiefly by Material</option>
+              <option value="7">7 Machinery and Transport Equipment</option>
+              <option value="8">8 Miscellaneous Manufactured Articles</option>
+              <option value="9">9 Commodities and Transactions Etc</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="col-md-12 mt-4">
+        <div class="search-footer">
+          <input type="button" class="btn btn-ft-primary me-2" value="Submit" (click)="search()">
+          <input type="button" class="btn btn-ft-primary me-2" value="Export" (click)="export()">
+          <input type="button" class="btn btn-ft-primary" value="Reset">
+        </div>
+      </div>
+    </div>
+    <!-- <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1" class="w-50">
+        <button ngbNavLink class="w-100"><b>Import</b></button>
+
+      </li>
+      <li [ngbNavItem]="2" class="w-50">
+        <button ngbNavLink class="w-100"><b>Export</b></button>
+        <ng-template ngbNavContent>
+          <div class="d-flex justify-content-end p-2 gap-2">
+            <select class="form-select w-auto" aria-label="Filter Select">
+              <option selected>Select</option>
+              <option value="1">ID</option>
+              <option value="2">Name</option>
+              <option value="3">Status</option>
+            </select>
+            <input type="text" class="form-control w-auto" placeholder="Enter Filter Value" aria-label="Filter Value"
+              aria-describedby="Filter Input">
+            <button class="btn btn-outline-primary" type="button" id="filter">Apply</button>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Country</th>
+                <th scope="col">Area</th>
+                <th scope="col">Population</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let country of countries">
+                <th scope="row">{{ country.id }}</th>
+                <td>
+                  <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="me-2"
+                    style="width: 20px" />
+                  {{ country.name }}
+                </td>
+                <td>{{ country.area | number}}</td>
+                <td>{{ country.population | number }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+              (pageChange)="refreshCountries()">
+            </ngb-pagination>
+
+            <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </ng-template>
+      </li>
+    </ul> -->
+      <div class="d-flex justify-content-end p-2 gap-2">
+        <select class="form-select w-auto" aria-label="Filter Select">
+          <option selected>Select</option>
+          <option value="1">ID</option>
+          <option value="2">Name</option>
+          <option value="3">Status</option>
+        </select>
+        <input type="text" class="form-control w-auto" placeholder="Enter Filter Value" aria-label="Filter Value"
+          aria-describedby="Filter Input">
+        <!-- filter icon button -->
+        <button class="btn btn-outline-primary" type="button" id="filter">Apply</button>
+      </div>
+      <table class="table table-striped">
+        <thead>
+
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Commodity</th>
+            <th scope="col">Commodity Arabic</th>
+            <th scope="col">Country</th>
+            <th scope="col">Country AR</th>
+            <th scope="col">Year</th>
+            <th scope="col">Month</th>
+            <th scope="col">Weight(Kg)</th>
+            <th scope="col">Value(QAR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let country of data">
+            <th scope="row">{{ country.itemCode }}</th>
+            <td>{{ country.hS8_ENG }}</td>
+            <td>{{ country.hS8_ARB }}</td>
+            <td>{{ country.countryName  }}</td>
+            <td>{{ country.countryName_ARB  }}</td>
+            <td>{{ country.year  }}</td>
+            <td>{{ country.month  }}</td>
+            <td>{{ country.weight  }}</td>
+            <td>{{ country.value  }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <div class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="filter.count" [(page)]="filter.pageno" [pageSize]="filter.pagesize"
+          (pageChange)="refreshCountries()" [maxSize]="10">
+        </ngb-pagination>
+
+
+      </div>
+    <!-- <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
+  </div>
+</div>
