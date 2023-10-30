@@ -140,16 +140,48 @@
 
               <div class="form-group col-md-6">
                 <label for="month" class="fs-16 form-label">Month</label>
-                <ng-select [items]="months" [multiple]="true" [(ngModel)]="filter.monthly" bindLabel="name" bindValue="value">
+                <ng-select [items]="monthsAll" [multiple]="true" [(ngModel)]="filter.monthly" bindLabel="name" bindValue="value"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false"
+                >
+                  <ng-template
+                    ng-optgroup-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    Select All
+                  </ng-template>
+
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    {{ item.name }}
+                  </ng-template>
+
                   <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-                    <ng-container *ngIf="items.length === 1">
-                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
-                        <span class="ng-value-label">{{item['name']}}</span>
+                    <ng-container *ngIf="items.length !== monthsAll.length">
+                      <ng-container *ngIf="items.length === 1">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label">{{item['name']}}</span>
+                        </div>
+                      </ng-container>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">{{items.length}} more...</span>
                       </div>
                     </ng-container>
-                    <div class="ng-value" *ngIf="items.length > 1">
-                      <span class="ng-value-label">{{items.length}} more...</span>
-                    </div>
+                    <ng-container *ngIf="items.length === monthsAll.length">
+                      <div class="ng-value">
+                        <span class="ng-value-label">All ({{monthsAll.length}})</span>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </ng-select>
               </div>
@@ -207,16 +239,48 @@
 
               <div class="form-group col-md-6">
                 <label for="month" class="fs-16 form-label">Quarter</label>
-                <ng-select [items]="quarters" [multiple]="true" [(ngModel)]="filter.quarterly" bindLabel="name" bindValue="value">
+                <ng-select [items]="quartersAll" [multiple]="true" [(ngModel)]="filter.quarterly" bindLabel="name" bindValue="value"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false"
+                >
+                  <ng-template
+                    ng-optgroup-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    Select All
+                  </ng-template>
+
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    {{ item.name }}
+                  </ng-template>
+
                   <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-                    <ng-container *ngIf="items.length === 1">
-                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
-                        <span class="ng-value-label">{{item['name']}}</span>
+                    <ng-container *ngIf="items.length !== quartersAll.length">
+                      <ng-container *ngIf="items.length === 1">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label">{{item['name']}}</span>
+                        </div>
+                      </ng-container>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">{{items.length}} more...</span>
                       </div>
                     </ng-container>
-                    <div class="ng-value" *ngIf="items.length > 1">
-                      <span class="ng-value-label">{{items.length}} more...</span>
-                    </div>
+                    <ng-container *ngIf="items.length === quartersAll.length">
+                      <div class="ng-value">
+                        <span class="ng-value-label">All ({{quartersAll.length}})</span>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </ng-select>
               </div>
