@@ -41,21 +41,110 @@
         <div class="row ft-year-row">
           <ng-container *ngIf="{ frequency: ftFrequencyValue$ | async } as vm">
             <!-- for year -->
-            <div class="form-group col-md-12" *ngIf="vm.frequency === 'Y'">
+            <div class="form-group col-md-12" *ngIf="vm.frequency === 'Y' || vm.frequency === '0'">
               <label for="year" class="fs-16 form-label">Year</label>
-              <ng-select [items]="years" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value">
+              <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
+                groupBy="selectedAllGroup"
+                [selectableGroup]="true"
+                [selectableGroupAsModel]="false"
+                [closeOnSelect]="false"
+              >
+                <ng-template
+                  ng-optgroup-tmp
+                  let-item="item"
+                  let-item$="item$"
+                  let-index="index"
+                >
+                  <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                  Select All
+                </ng-template>
+
+                <ng-template
+                  ng-option-tmp
+                  let-item="item"
+                  let-item$="item$"
+                  let-index="index"
+                >
+                  <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                  {{ item.value }}
+                </ng-template>
+
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <ng-container *ngIf="items.length !== yearsAll.length">
+                    <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                      <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      <span class="ng-value-label">{{item['value']}}</span>
+                    </div>
+                    <div class="ng-value" *ngIf="items.length > 2">
+                      <span class="ng-value-label">{{items.length - 2}} more...</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="items.length === yearsAll.length">
+                    <div class="ng-value">
+                      <span class="ng-value-label">All ({{yearsAll.length}})</span>
+                    </div>
+                  </ng-container>
+                </ng-template>
               </ng-select>
             </div>
             <!-- for monthly -->
             <ng-container *ngIf="vm.frequency === 'M'">
               <div class="form-group col-md-6">
                 <label for="year" class="fs-16 form-label">Year</label>
-                <ng-select [items]="years" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value">
+                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false"
+                >
+                  <ng-template
+                    ng-optgroup-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    Select All
+                  </ng-template>
+
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    {{ item.value }}
+                  </ng-template>
+
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <ng-container *ngIf="items.length !== yearsAll.length">
+                      <ng-container *ngIf="items.length === 1">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+                          <span class="ng-value-label">{{item['value']}}</span>
+                        </div>
+                      </ng-container>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">{{items.length}} more...</span>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="items.length === yearsAll.length">
+                      <div class="ng-value">
+                        <span class="ng-value-label">All ({{yearsAll.length}})</span>
+                      </div>
+                    </ng-container>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="month" class="fs-16 form-label">Month</label>
+                <ng-select [items]="months" [multiple]="true" [(ngModel)]="filter.monthly" bindLabel="name" bindValue="value">
                   <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                     <ng-container *ngIf="items.length === 1">
                       <div class="ng-value" *ngFor="let item of items | slice:0:1">
-                        <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
-                        <span class="ng-value-label">{{item['value']}}</span>
+                        <span class="ng-value-label">{{item['name']}}</span>
                       </div>
                     </ng-container>
                     <div class="ng-value" *ngIf="items.length > 1">
@@ -64,10 +153,61 @@
                   </ng-template>
                 </ng-select>
               </div>
+            </ng-container>
+            <!-- for quarterly -->
+            <ng-container *ngIf="vm.frequency === 'Q'">
+              <div class="form-group col-md-6">
+                <label for="year" class="fs-16 form-label">Year</label>
+                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false"
+                >
+                  <ng-template
+                    ng-optgroup-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    Select All
+                  </ng-template>
+
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                    {{ item.value }}
+                  </ng-template>
+
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <ng-container *ngIf="items.length !== yearsAll.length">
+                      <ng-container *ngIf="items.length === 1">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+                          <span class="ng-value-label">{{item['value']}}</span>
+                        </div>
+                      </ng-container>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">{{items.length}} more...</span>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="items.length === yearsAll.length">
+                      <div class="ng-value">
+                        <span class="ng-value-label">All ({{yearsAll.length}})</span>
+                      </div>
+                    </ng-container>
+                  </ng-template>
+                </ng-select>
+              </div>
 
               <div class="form-group col-md-6">
-                <label for="month" class="fs-16 form-label">Month</label>
-                <ng-select [items]="months" [multiple]="true" [(ngModel)]="filter.month" bindLabel="name" bindValue="value">
+                <label for="month" class="fs-16 form-label">Quarter</label>
+                <ng-select [items]="quarters" [multiple]="true" [(ngModel)]="filter.quarterly" bindLabel="name" bindValue="value">
                   <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                     <ng-container *ngIf="items.length === 1">
                       <div class="ng-value" *ngFor="let item of items | slice:0:1">
