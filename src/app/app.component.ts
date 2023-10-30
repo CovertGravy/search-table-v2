@@ -515,11 +515,13 @@ export class AppComponent {
 
 	onChangeCode(code) {
 		this.filter.level = "0";
+		this.filter.hscode = [];
 		if (code === 'HSCODE') this._levels$.next(this.hscodeLevels);
 		if (code === 'SITC') this._levels$.next(this.sitcLevels);
 	}
 
 	onChangeLevel(level) {
+		this.filter.hscode = [];
 		if (level !== '0') {
 			this.getAllItemsList();
 		}

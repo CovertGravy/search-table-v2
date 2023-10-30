@@ -5,6 +5,83 @@
   padding: 20px;
 }
 
+header {
+  background-color: #006c80;
+  margin-inline: -20px;
+  margin-block-start: -20px;
+}
+
+section {
+  padding: 40px;
+}
+
+.lightBrown-bg {
+  background-color: #f8f3ed;
+}
+
+.stats-subject-list .title {
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.stats-subject-item a {
+  background-color: #fff;
+  padding: 10px;
+  display: block;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  position: relative;
+  font-weight: 500;
+  color: #5d2c00;
+  border: 1px solid #bdbdbd;
+  transition: all .3s ease-in;
+}
+
+.stats-subject-item a:after {
+  content: "";
+  right: 15px;
+  top: 15px;
+  position: absolute;
+  background: url(../assets/PSASprite.png) no-repeat;
+  height: 11px;
+  width: 14px;
+  background-position: -533px -582px;
+}
+
+.stats-subject-item a:hover {
+  background-color: #583000;
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
+  transform: scale(1.05);
+  color: #fff;
+  border: 1px solid #583000;
+  text-decoration: none;
+}
+
+.stats-subject-item a:hover:after{background-position:-510px -582px}
+
+.stats-subject-listItem {
+  padding-top: 1.5rem;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -15px;
+  margin-right: -15px;
+  position: relative;
+  padding-block: 1rem;
+}
+
+.lightBlue-bg {
+  background-color: #ebf5f7;
+}
+
 .pagetitle-block {
   display: flex;
   justify-content: space-between;

@@ -1,3 +1,68 @@
+<!-- Header -->
+<header>
+  <div class="container">
+    <div class="row header-row">
+      <div class="psa-logo">
+        <a title="Planning and Statistics Authority Home Page">
+          <img src="../assets/psa-logo.png" alt="planning and Statistics Authority Logo">
+        </a>
+        <span class="separator-logo">
+          <img src="../assets/sep.png" alt="Logo Separator">
+        </span>
+        <span class="expo2023">
+          <img src="../assets/expo2023-logo-white.png" alt="Expo 2023 Logo Doha Qatar">
+        </span>
+        <a href="#main-content" title="Skip navigation to read the main content">
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="lightBrown-bg">
+  <div class="container">
+    <div class="row">
+      <div class="section-content">
+        <div class="stats-subject-list">
+          <div class="title">Dashboard</div>
+          <div class="stats-subject-listItem row">
+            <div class="col-md-4 stats-subject-item">
+              <a href="https://mannai.cloud.looker.com/embed/dashboards/29?Year=&Port%20Name=&By%20Item=&Country%20Name=" target="_blank">
+                Statistics
+              </a>
+            </div>
+            <div class="col-md-4 stats-subject-item">
+              <a href="https://lookerstudio.google.com/reporting/f026cf14-831c-4509-87c9-0e752b0f81b0/page/tEnnC?s=qCSr6f6Vsqk" target="_blank">
+                Foreign Trade
+              </a>
+            </div>
+            <div class="col-md-4 stats-subject-item">
+              <a href="https://lookerstudio.google.com/reporting/f026cf14-831c-4509-87c9-0e752b0f81b0/page/tEnnC" target="_blank">
+                Analysis
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lightBlue-bg">
+  <div class="container">
+    <div class="row">
+      <div class="section-content">
+        <div class="stats-subject-list">
+          <div class="title">Foreign Trade Advanced Search</div>
+          <div class="py-4 fs-6">
+            <strong>Foreign Trade Advanced Search System</strong> is a User portal for obtaining foreign trade data (exports and imports) is classified by commodity, value, quantity and country of destination \ origin at the 4-digit level of Harmonized System for exports (HS4) and the at the 8-digit level of the Harmonized System for imports (HS8).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="card">
   <div class="card-body">
     <!-- <div class="input-group mb-3">
@@ -20,11 +85,11 @@
             <label for="ft-trade" class="fs-16 form-label">Trade</label>
 
             <ng-select [items]="trade" [multiple]="true" [(ngModel)]="filter.tradetype" bindLabel="name" bindValue="id"
-              [clearable]="false"
-            >
+              [clearable]="false">
               <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                 <div class="ng-value" *ngFor="let item of items">
-                  <span class="ng-value-icon right" *ngIf="items.length > 1" (click)="clear(item)" aria-hidden="true">×</span>
+                  <span class="ng-value-icon right" *ngIf="items.length > 1" (click)="clear(item)"
+                    aria-hidden="true">×</span>
                   <span class="ng-value-label">{{item['name']}}</span>
                 </div>
               </ng-template>
@@ -32,7 +97,8 @@
           </div>
           <div class="form-group col-md-6">
             <label for="ft-frequency" class="fs-16 form-label">Frequency</label>
-            <select #ftFrequency class="form-control form-select" id="ft-frequency" (change)="onChangeFrequency(ftFrequency.value)">
+            <select #ftFrequency class="form-control form-select" id="ft-frequency"
+              (change)="onChangeFrequency(ftFrequency.value)">
               <option value="0">Select</option>
               <option value="M">Monthly</option>
               <option value="Q">Quarterly</option>
@@ -51,28 +117,15 @@
             <!-- for year -->
             <div class="form-group col-md-12" *ngIf="vm.frequency === 'Y' || vm.frequency === '0'">
               <label for="year" class="fs-16 form-label">Year</label>
-              <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
-                groupBy="selectedAllGroup"
-                [selectableGroup]="true"
-                [selectableGroupAsModel]="false"
-                [closeOnSelect]="false"
-              >
-                <ng-template
-                  ng-optgroup-tmp
-                  let-item="item"
-                  let-item$="item$"
-                  let-index="index"
-                >
+              <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value"
+                bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                [closeOnSelect]="false">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                   Select All
                 </ng-template>
 
-                <ng-template
-                  ng-option-tmp
-                  let-item="item"
-                  let-item$="item$"
-                  let-index="index"
-                >
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                   {{ item.value }}
                 </ng-template>
@@ -99,28 +152,15 @@
             <ng-container *ngIf="vm.frequency === 'M'">
               <div class="form-group col-md-6">
                 <label for="year" class="fs-16 form-label">Year</label>
-                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
-                  groupBy="selectedAllGroup"
-                  [selectableGroup]="true"
-                  [selectableGroupAsModel]="false"
-                  [closeOnSelect]="false"
-                >
-                  <ng-template
-                    ng-optgroup-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value"
+                  bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false">
+                  <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     Select All
                   </ng-template>
 
-                  <ng-template
-                    ng-option-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     {{ item.value }}
                   </ng-template>
@@ -148,28 +188,15 @@
 
               <div class="form-group col-md-6">
                 <label for="month" class="fs-16 form-label">Month</label>
-                <ng-select [items]="monthsAll" [multiple]="true" [(ngModel)]="filter.monthly" bindLabel="name" bindValue="value"
-                  groupBy="selectedAllGroup"
-                  [selectableGroup]="true"
-                  [selectableGroupAsModel]="false"
-                  [closeOnSelect]="false"
-                >
-                  <ng-template
-                    ng-optgroup-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                <ng-select [items]="monthsAll" [multiple]="true" [(ngModel)]="filter.monthly" bindLabel="name"
+                  bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false">
+                  <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     Select All
                   </ng-template>
 
-                  <ng-template
-                    ng-option-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     {{ item.name }}
                   </ng-template>
@@ -198,28 +225,15 @@
             <ng-container *ngIf="vm.frequency === 'Q'">
               <div class="form-group col-md-6">
                 <label for="year" class="fs-16 form-label">Year</label>
-                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value" bindValue="value"
-                  groupBy="selectedAllGroup"
-                  [selectableGroup]="true"
-                  [selectableGroupAsModel]="false"
-                  [closeOnSelect]="false"
-                >
-                  <ng-template
-                    ng-optgroup-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                <ng-select [items]="yearsAll" [multiple]="true" [(ngModel)]="filter.year" bindLabel="value"
+                  bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false">
+                  <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     Select All
                   </ng-template>
 
-                  <ng-template
-                    ng-option-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     {{ item.value }}
                   </ng-template>
@@ -247,28 +261,15 @@
 
               <div class="form-group col-md-6">
                 <label for="month" class="fs-16 form-label">Quarter</label>
-                <ng-select [items]="quartersAll" [multiple]="true" [(ngModel)]="filter.quarterly" bindLabel="name" bindValue="value"
-                  groupBy="selectedAllGroup"
-                  [selectableGroup]="true"
-                  [selectableGroupAsModel]="false"
-                  [closeOnSelect]="false"
-                >
-                  <ng-template
-                    ng-optgroup-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                <ng-select [items]="quartersAll" [multiple]="true" [(ngModel)]="filter.quarterly" bindLabel="name"
+                  bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                  [closeOnSelect]="false">
+                  <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     Select All
                   </ng-template>
 
-                  <ng-template
-                    ng-option-tmp
-                    let-item="item"
-                    let-item$="item$"
-                    let-index="index"
-                  >
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                     <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                     {{ item.name }}
                   </ng-template>
@@ -306,7 +307,8 @@
             <div class="row ft-year-row">
               <div class="col-md-12">
                 <label class="fs-16 form-label">Select Country</label>
-                <ng-select [items]="cntry" [multiple]="true" [(ngModel)]="filter.country" bindLabel="name" bindValue="name">
+                <ng-select [items]="cntry" [multiple]="true" [(ngModel)]="filter.country" bindLabel="name"
+                  bindValue="name">
                 </ng-select>
 
 
@@ -323,7 +325,8 @@
         <div class="row ft-query-row">
           <div class="form-group col-md-6">
             <label class="fs-16 form-label">Code</label>
-            <select #ftItemCode class="form-control form-select" id="ft-itemCode" [(ngModel)]="filter.code" (change)="onChangeCode(ftItemCode.value)">
+            <select #ftItemCode class="form-control form-select" id="ft-itemCode" [(ngModel)]="filter.code"
+              (change)="onChangeCode(ftItemCode.value)">
               <option value="0">Select</option>
               <option value="HSCODE" selected>HSCODE</option>
               <option value="SITC">SITC</option>
@@ -331,7 +334,8 @@
           </div>
           <div class="form-group col-md-6">
             <label class="fs-16 form-label">Level</label>
-            <select #ftItemLevel class="form-control form-select" id="ft-itemlevel" [(ngModel)]="filter.level" (change)="onChangeLevel(ftItemLevel.value)">
+            <select #ftItemLevel class="form-control form-select" id="ft-itemlevel" [(ngModel)]="filter.level"
+              (change)="onChangeLevel(ftItemLevel.value)">
               <option value="0">Select</option>
               <option *ngFor="let level of levels$ | async" value="{{level}}">{{level}}</option>
               <!-- <option value="0">Select</option>
@@ -367,30 +371,15 @@
           <div class="form-group col-md-6">
             <label for="ft-trade" class="fs-16 form-label">All Items</label>
             <ng-container *ngIf="{allItems: allItems$ | async, allItemsLoading: allItemsLoading$ | async} as vm">
-              <ng-select [items]="vm.allItems" [multiple]="true" [(ngModel)]="filter.hscode" bindLabel="name" bindValue="value"
-                groupBy="selectedAllGroup"
-                [selectableGroup]="true"
-                [selectableGroupAsModel]="false"
-                [closeOnSelect]="false"
-                [loading]="vm.allItemsLoading"
-                [virtualScroll]="true"
-              >
-                <ng-template
-                  ng-optgroup-tmp
-                  let-item="item"
-                  let-item$="item$"
-                  let-index="index"
-                >
+              <ng-select [items]="vm.allItems" [multiple]="true" [(ngModel)]="filter.hscode" bindLabel="name"
+                bindValue="value" groupBy="selectedAllGroup" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                [closeOnSelect]="false" [loading]="vm.allItemsLoading" [virtualScroll]="true">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                   Select All
                 </ng-template>
 
-                <ng-template
-                  ng-option-tmp
-                  let-item="item"
-                  let-item$="item$"
-                  let-index="index"
-                >
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
                   {{ item.value }} - {{ item.name }}
                 </ng-template>
@@ -483,56 +472,56 @@
         </ng-template>
       </li>
     </ul> -->
-      <div class="d-flex justify-content-end p-2 gap-2">
-        <select class="form-select w-auto" aria-label="Filter Select">
-          <option selected>Select</option>
-          <option value="1">ID</option>
-          <option value="2">Name</option>
-          <option value="3">Status</option>
-        </select>
-        <input type="text" class="form-control w-auto" placeholder="Enter Filter Value" aria-label="Filter Value"
-          aria-describedby="Filter Input">
-        <!-- filter icon button -->
-        <button class="btn btn-outline-primary" type="button" id="filter">Apply</button>
-      </div>
-      <table class="table table-striped">
-        <thead>
+    <div class="d-flex justify-content-end p-2 gap-2">
+      <select class="form-select w-auto" aria-label="Filter Select">
+        <option selected>Select</option>
+        <option value="1">ID</option>
+        <option value="2">Name</option>
+        <option value="3">Status</option>
+      </select>
+      <input type="text" class="form-control w-auto" placeholder="Enter Filter Value" aria-label="Filter Value"
+        aria-describedby="Filter Input">
+      <!-- filter icon button -->
+      <button class="btn btn-outline-primary" type="button" id="filter">Apply</button>
+    </div>
+    <table class="table table-striped">
+      <thead>
 
-          <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Commodity</th>
-            <th scope="col">Commodity Arabic</th>
-            <th scope="col">Country</th>
-            <th scope="col">Country AR</th>
-            <th scope="col">Year</th>
-            <th scope="col">Month</th>
-            <th scope="col">Weight(Kg)</th>
-            <th scope="col">Value(QAR)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let country of data">
-            <th scope="row">{{ country.itemCode }}</th>
-            <td>{{ country.hS8_ENG }}</td>
-            <td>{{ country.hS8_ARB }}</td>
-            <td>{{ country.countryName  }}</td>
-            <td>{{ country.countryName_ARB  }}</td>
-            <td>{{ country.year  }}</td>
-            <td>{{ country.month  }}</td>
-            <td>{{ country.weight  }}</td>
-            <td>{{ country.value  }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-      <div class="d-flex justify-content-between p-2">
-        <ngb-pagination [collectionSize]="filter.count" [(page)]="filter.pageno" [pageSize]="filter.pagesize"
-          (pageChange)="refreshCountries()" [maxSize]="10">
-        </ngb-pagination>
+        <tr>
+          <th scope="col">Code</th>
+          <th scope="col">Commodity</th>
+          <th scope="col">Commodity Arabic</th>
+          <th scope="col">Country</th>
+          <th scope="col">Country AR</th>
+          <th scope="col">Year</th>
+          <th scope="col">Month</th>
+          <th scope="col">Weight(Kg)</th>
+          <th scope="col">Value(QAR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let country of data">
+          <th scope="row">{{ country.itemCode }}</th>
+          <td>{{ country.hS8_ENG }}</td>
+          <td>{{ country.hS8_ARB }}</td>
+          <td>{{ country.countryName }}</td>
+          <td>{{ country.countryName_ARB }}</td>
+          <td>{{ country.year }}</td>
+          <td>{{ country.month }}</td>
+          <td>{{ country.weight }}</td>
+          <td>{{ country.value }}</td>
+        </tr>
+      </tbody>
+    </table>
 
 
-      </div>
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination [collectionSize]="filter.count" [(page)]="filter.pageno" [pageSize]="filter.pagesize"
+        (pageChange)="refreshCountries()" [maxSize]="10">
+      </ngb-pagination>
+
+
+    </div>
     <!-- <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
   </div>
 </div>
