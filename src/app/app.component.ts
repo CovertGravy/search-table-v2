@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject } from 'rxjs';
 
 interface Country {
@@ -98,8 +99,10 @@ const COUNTRIES: Country[] = [
 @Component({
 	standalone: true,
 	imports: [
-		NgbNavModule, CommonModule, FormsModule, NgbTypeaheadModule, NgbPaginationModule, NgSelectModule, HttpClientModule
+		NgbNavModule, CommonModule, FormsModule, NgbTypeaheadModule, NgbPaginationModule, NgSelectModule, HttpClientModule,
+		NgxSpinnerModule
 	],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
@@ -113,8 +116,19 @@ export class AppComponent {
 	data = [];
 	_ftFrequencyValue$ = new BehaviorSubject<string>('Y');
 	ftFrequencyValue$ = this._ftFrequencyValue$.asObservable();
+	hscodeLevels = ["2", "4", "8"];
+	sitcLevels = ["1"];
+	_levels$ = new BehaviorSubject<string[]>(this.hscodeLevels);
+	levels$ = this._levels$.asObservable();
+	_allItems$ = new BehaviorSubject<{name: string, value: string}[]>([]);
+	allItems$ = this._allItems$.asObservable();
+	_allItemsLoading$ = new BehaviorSubject<boolean>(false);
+	allItemsLoading$ = this._allItemsLoading$.asObservable();
+	_loading$ = new BehaviorSubject<boolean>(true);
+	loading$ = this._loading$.asObservable();
 
-	constructor(private http: HttpClient) {
+
+	constructor(private http: HttpClient, private spinner: NgxSpinnerService) {
 		this.refreshCountries();
 	}
 	trade = [
@@ -224,6 +238,7 @@ export class AppComponent {
 	yearsAll = this.years.map(y => ({ ...y, selectedAllGroup: true }));
 	monthsAll = this.months.map(m => ({ ...m, selectedAllGroup: true }));
 	quartersAll = this.quarters.map(q => ({ ...q, selectedAllGroup: true }));
+
 	cntry = [
 		{ "name": "Albania", "code": "AL" },
 		{ "name": "Åland Islands", "code": "AX" },
@@ -475,7 +490,7 @@ export class AppComponent {
 		{ "name": "Zimbabwe", "code": "ZW" }
 	];
 	filter = {
-		tradetype: [],
+		tradetype: ["I"],
 		year: [],
 		monthly: [],
 		quarterly: [],
@@ -483,6 +498,9 @@ export class AppComponent {
 		pagesize: 20,
 		count: 0,
 		country: [],
+		level: "0",
+		code: "HSCODE",
+		hscode: [],
 	}
 
 	refreshCountries() {
@@ -491,17 +509,53 @@ export class AppComponent {
 
 	onChangeFrequency(frequency) {
 		this._ftFrequencyValue$.next(frequency);
+		this.filter.monthly = [];
+		this.filter.quarterly = [];
+	}
+
+	onChangeCode(code) {
+		this.filter.level = "0";
+		if (code === 'HSCODE') this._levels$.next(this.hscodeLevels);
+		if (code === 'SITC') this._levels$.next(this.sitcLevels);
+	}
+
+	onChangeLevel(level) {
+		if (level !== '0') {
+			this.getAllItemsList();
+		}
+	}
+
+	getAllItemsList() {
+		this._allItemsLoading$.next(true);
+		const body = {
+			isHSCode: this.filter.code === 'HSCODE',
+			level: this.filter.level === '0' ? null : this.filter.level,
+		}
+		this.http.post('https://demo-api.fit-infotech.com/api/History/getFilterParams', body).subscribe({
+			next: (response: any) => {
+				const data = response?.data ?? [];
+				this._allItems$.next(data?.map(item => ({...item, selectedAllGroup: true })));
+			},
+			complete: () => {
+				this._allItemsLoading$.next(false);
+			}
+		})
 	}
 
 	search() {
+		this.spinner.show();
 		const payload = {
-			tradetype: "'" + this.filter.tradetype.join("','") + "'",
+			tradetype: this.filter.tradetype.join("','"),
 			year: this.filter.year.join(","),
-			country: "'" + this.filter.country.join("','") + "'",
+			country: this.filter.country.join("','"),
 			monthly: this.filter.monthly.join(","),
 			quarterly: this.filter.quarterly.join(","),
 			pageno: this.filter.pageno,
-			pagesize: this.filter.pagesize
+			pagesize: this.filter.pagesize,
+			isHSCode: this.filter.code === 'HSCODE',
+			level: this.filter.level === '0' ? null : this.filter.level,
+			hscode: this.filter.hscode.join(","),
+			sitccode: this.filter.hscode.join(","),
 		}
 		this.http.post('https://demo-api.fit-infotech.com/api/History/getSearchData', payload).subscribe(x => {
 			if (x['status']) {
@@ -512,20 +566,30 @@ export class AppComponent {
 				this.data = [];
 				this.filter.count = 0
 			}
-		})
+		}, error => {
+			this.data = [];
+			this.filter.count = 0;
+			this.spinner.hide();
+		}, () => {
+			this.spinner.hide();
+		}
+		)
 	}
 
 	export() {
 		const payload = {
-			tradetype: "'" + this.filter.tradetype.join("','") + "'",
-			pageno: this.filter.pageno,
-			pagesize: this.filter.pagesize,
+			tradetype: this.filter.tradetype.join("','"),
 			year: this.filter.year.join(","),
+			country: this.filter.country.join("','"),
 			monthly: this.filter.monthly.join(","),
 			quarterly: this.filter.quarterly.join(","),
-			country: "'" + this.filter.country.join("','") + "'",
+			pageno: this.filter.pageno,
+			pagesize: this.filter.pagesize,
+			isHSCode: this.filter.code === 'HSCODE',
+			level: this.filter.level === '0' ? null : this.filter.level,
+			hscode: this.filter.hscode.join(","),
+			sitccode: this.filter.hscode.join(","),
 		}
-
 		this.http.post('https://demo-api.fit-infotech.com/api/History/exportFile', payload, { responseType: 'blob' as 'blob' }).subscribe(x => {
 			let filetype = {};
 

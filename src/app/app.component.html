@@ -19,7 +19,15 @@
           <div class="form-group col-md-6">
             <label for="ft-trade" class="fs-16 form-label">Trade</label>
 
-            <ng-select [items]="trade" [multiple]="true" [(ngModel)]="filter.tradetype" bindLabel="name" bindValue="id">
+            <ng-select [items]="trade" [multiple]="true" [(ngModel)]="filter.tradetype" bindLabel="name" bindValue="id"
+              [clearable]="false"
+            >
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items">
+                  <span class="ng-value-icon right" *ngIf="items.length > 1" (click)="clear(item)" aria-hidden="true">×</span>
+                  <span class="ng-value-label">{{item['name']}}</span>
+                </div>
+              </ng-template>
             </ng-select>
           </div>
           <div class="form-group col-md-6">
@@ -315,7 +323,7 @@
         <div class="row ft-query-row">
           <div class="form-group col-md-6">
             <label class="fs-16 form-label">Code</label>
-            <select class="form-control form-select" id="ft-itemCode">
+            <select #ftItemCode class="form-control form-select" id="ft-itemCode" [(ngModel)]="filter.code" (change)="onChangeCode(ftItemCode.value)">
               <option value="0">Select</option>
               <option value="HSCODE" selected>HSCODE</option>
               <option value="SITC">SITC</option>
@@ -323,11 +331,13 @@
           </div>
           <div class="form-group col-md-6">
             <label class="fs-16 form-label">Level</label>
-            <select class="form-control form-select" id="ft-itemlevel">
+            <select #ftItemLevel class="form-control form-select" id="ft-itemlevel" [(ngModel)]="filter.level" (change)="onChangeLevel(ftItemLevel.value)">
               <option value="0">Select</option>
-              <option value="HSCODE">2</option>
-              <option value="HSCODE">4</option>
-              <option value="HSCODE">8</option>
+              <option *ngFor="let level of levels$ | async" value="{{level}}">{{level}}</option>
+              <!-- <option value="0">Select</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="8">8</option> -->
             </select>
           </div>
         </div>
@@ -338,7 +348,7 @@
           <div class="title"><span>5</span>Items</div>
         </div>
         <div class="row ft-query-row">
-          <div class="form-group col-md-6" id="div-ft-itemclassification">
+          <!-- <div class="form-group col-md-6" id="div-ft-itemclassification">
             <label for="ft-trade" class="fs-16 form-label">Classification</label>
             <select class="form-control form-select" id="ft-itemclassification">
               <option value="-1">Select</option>
@@ -353,22 +363,58 @@
               <option value="8">8 Miscellaneous Manufactured Articles</option>
               <option value="9">9 Commodities and Transactions Etc</option>
             </select>
-          </div>
+          </div> -->
           <div class="form-group col-md-6">
             <label for="ft-trade" class="fs-16 form-label">All Items</label>
-            <select class="form-control form-select">
-              <option value="-1">Select</option>
-              <option value="0">0 Food and Live Animals</option>
-              <option value="1">1 Beverages and Tobacco</option>
-              <option value="2">2 Crude Materials, Incredible, Except Fuels</option>
-              <option value="3">3 Mineral Fuels, Lubricants and Related Materials</option>
-              <option value="4">4 Animal and Vegetable Oils, Fats and Waxes</option>
-              <option value="5">5 Chemicals and Related Products N.E.S.</option>
-              <option value="6">6 Manufactured Goods Classified Chiefly by Material</option>
-              <option value="7">7 Machinery and Transport Equipment</option>
-              <option value="8">8 Miscellaneous Manufactured Articles</option>
-              <option value="9">9 Commodities and Transactions Etc</option>
-            </select>
+            <ng-container *ngIf="{allItems: allItems$ | async, allItemsLoading: allItemsLoading$ | async} as vm">
+              <ng-select [items]="vm.allItems" [multiple]="true" [(ngModel)]="filter.hscode" bindLabel="name" bindValue="value"
+                groupBy="selectedAllGroup"
+                [selectableGroup]="true"
+                [selectableGroupAsModel]="false"
+                [closeOnSelect]="false"
+                [loading]="vm.allItemsLoading"
+                [virtualScroll]="true"
+              >
+                <ng-template
+                  ng-optgroup-tmp
+                  let-item="item"
+                  let-item$="item$"
+                  let-index="index"
+                >
+                  <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                  Select All
+                </ng-template>
+
+                <ng-template
+                  ng-option-tmp
+                  let-item="item"
+                  let-item$="item$"
+                  let-index="index"
+                >
+                  <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                  {{ item.value }} - {{ item.name }}
+                </ng-template>
+
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <ng-container *ngIf="items.length !== vm.allItems.length">
+                    <ng-container *ngIf="items.length === 1">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                        <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+                        <span class="ng-value-label">{{ item['name'] }} - {{item['value']}}</span>
+                      </div>
+                    </ng-container>
+                    <div class="ng-value" *ngIf="items.length > 1">
+                      <span class="ng-value-label">{{items.length}} selected</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="items.length === vm.allItems.length">
+                    <div class="ng-value">
+                      <span class="ng-value-label">All ({{vm.allItems.length}})</span>
+                    </div>
+                  </ng-container>
+                </ng-template>
+              </ng-select>
+            </ng-container>
           </div>
         </div>
       </div>
@@ -490,3 +536,7 @@
     <!-- <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
   </div>
 </div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-scale" [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>
